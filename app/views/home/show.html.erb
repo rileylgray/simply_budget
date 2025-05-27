@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <h1 class="card-title mb-4">Welcome to Bugeting</h1>
+          <p class="lead mb-4">
+            Take control of your finances. Track your income, expenses, and savings all in one place.
+          </p>
+          <div class="row mb-4">
+            <div class="col-md-4 mb-3 mb-md-0">
+              <div class="card border-primary h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">Add Expenses</h5>
+                  <p class="card-text">Log your daily expenses and see where your money goes.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+              <div class="card border-success h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Set Budgets</h5>
+                  <p class="card-text">Create monthly budgets and track your progress.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-info h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-info">View Reports</h5>
+                  <p class="card-text">Visualize your spending with easy-to-read charts and summaries.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% if logged_in? %>
+            <a href="<%= user_path(current_user) %>" class="btn btn-primary btn-lg">Go to Your Profile</a>
+          <% else %>
+            <a href="<%= sign_in_path %>" class="btn btn-primary btn-lg me-2">Sign In</a>
+            <a href="<%= new_session_path %>" class="btn btn-outline-primary btn-lg">Sign Up</a>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

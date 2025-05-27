@@ -1,0 +1,53 @@
+<% content_for :title, "Incomes" %>
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Income Streams</h1>
+    <%= link_to "Add New Income", new_income_path, class: "btn btn-success" %>
+  </div>
+
+  <% if notice %>
+    <div class="alert alert-success">
+      <%= notice %>
+    </div>
+  <% end %>
+
+  <div class="card shadow">
+    <div class="card-body">
+      <% if @incomes.any? %>
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Source</th>
+              <th>Amount</th>
+              <th>Frequency</th>
+              <th>Date Received</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @incomes.each do |income| %>
+              <tr>
+                <td><%= income.source %></td>
+                <td><%= number_to_currency(income.amount) %></td>
+                <td><span class="badge bg-info text-dark"><%= income.frequency.humanize %></span></td>
+                <td><%= income.received_on.strftime("%b %d, %Y") if income.received_on %></td>
+                <td><%= income.notes.presence || "-" %></td>
+                <td>
+                  <%= link_to "Show", income, class: "btn btn-sm btn-outline-primary" %>
+                  <%= link_to "Edit", edit_income_path(income), class: "btn btn-sm btn-outline-secondary" %>
+                  <%= link_to "Delete", income, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="alert alert-info mb-0">
+          No income records found. Start by adding your first income stream!
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
