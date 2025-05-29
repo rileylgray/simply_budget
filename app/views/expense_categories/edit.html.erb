@@ -1,0 +1,14 @@
+<% content_for :title, "Edit Expense Category" %>
+
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center">Edit Expense Category</h2>
+      <%= render "form", expense_category: @expense_category %>
+      <div class="text-center mt-3">
+        <%= link_to "Show this Category", @expense_category, class: "btn btn-outline-primary me-2" %>
+        <%= link_to "Back to Categories", expense_categories_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+</div>

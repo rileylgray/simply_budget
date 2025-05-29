@@ -7,6 +7,11 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, presence: true, length: { minimum: 6 }, if: :password_required?
 
+  has_many :expenses, dependent: :destroy
+  has_many :incomes, dependent: :destroy
+  has_many :income_categories, dependent: :destroy
+  has_many :expense_categories, dependent: :destroy
+
   def name
     "#{firstname} #{lastname}"
   end

@@ -1,10 +1,34 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @income %>
-
-<div>
-  <%= link_to "Edit this income", edit_income_path(@income) %> |
-  <%= link_to "Back to incomes", incomes_path %>
-
-  <%= button_to "Destroy this income", @income, method: :delete %>
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <% if notice %>
+        <div class="alert alert-success text-center">
+          <%= notice %>
+        </div>
+      <% end %>
+      <h2 class="card-title mb-4 text-center">Income Details</h2>
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item">
+          <strong>Source:</strong> <%= @income.source %>
+        </li>
+        <li class="list-group-item">
+          <strong>Amount:</strong> <%= number_to_currency(@income.amount) %>
+        </li>
+        <li class="list-group-item">
+          <strong>Frequency:</strong> <span class="badge bg-info text-dark"><%= @income.frequency.humanize %></span>
+        </li>
+        <li class="list-group-item">
+          <strong>Date Received:</strong> <%= @income.received_on.strftime("%b %d, %Y") if @income.received_on %>
+        </li>
+        <li class="list-group-item">
+          <strong>Notes:</strong> <%= @income.notes.presence || "-" %>
+        </li>
+      </ul>
+      <div class="d-flex justify-content-between">
+        <%= link_to "Edit", edit_income_path(@income), class: "btn btn-outline-primary" %>
+        <%= link_to "Back to Incomes", incomes_path, class: "btn btn-outline-secondary" %>
+        <%= button_to "Delete", @income, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger" %>
+      </div>
+    </div>
+  </div>
 </div>

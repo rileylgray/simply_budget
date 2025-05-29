@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <span class="navbar-brand">
+      Welcome<% if logged_in? %>, <%= current_user.name %><% end %>!
+    </span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-3">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+        </li>
+        <li class="nav-item dropdown">
+          <%= link_to "Income Streams", incomes_path, class: "nav-link dropdown-toggle #{'active' if controller_name.start_with?('income')}", id: "incomesDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } %>
+          <ul class="dropdown-menu" aria-labelledby="incomesDropdown">
+            <li>
+              <%= link_to "All", incomes_path, class: "dropdown-item #{'active' if current_page?(incomes_path)}" %>
+            </li>
+            <li>
+              <%= link_to "Categories", income_categories_path, class: "dropdown-item #{'active' if current_page?(income_categories_path)}" %>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <%= link_to "Expenses", expenses_path, class: "nav-link dropdown-toggle #{'active' if controller_name.start_with?('expense')}", id: "expensesDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } %>
+          <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+            <li>
+              <%= link_to "All", expenses_path, class: "dropdown-item #{'active' if current_page?(expenses_path)}" %>
+            </li>
+            <li>
+              <%= link_to "Categories", expense_categories_path, class: "dropdown-item #{'active' if current_page?(expense_categories_path)}" %>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <% if logged_in? %>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <%= button_to "Log Out", sign_out_path, method: :delete, class: "btn btn-outline-light ms-2", form: { class: "d-inline" } %>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</nav>

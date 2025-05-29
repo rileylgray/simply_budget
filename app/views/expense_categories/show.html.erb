@@ -1,0 +1,24 @@
+<% content_for :title, "Expense Category Details" %>
+
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center">Expense Category Details</h2>
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item">
+          <strong>Name:</strong> <%= @expense_category.name %>
+        </li>
+        <li class="list-group-item">
+          <strong>Description:</strong> <%= @expense_category.description.presence || "-" %>
+        </li>
+      </ul>
+      <div class="d-flex justify-content-between">
+        <%= link_to "Edit", edit_expense_category_path(@expense_category), class: "btn btn-outline-primary" %>
+        <%= link_to "Back to Categories", expense_categories_path, class: "btn btn-outline-secondary" %>
+        <%= button_to @expense_category, method: :delete, data: { turbo_confirm: "Are you sure you want to delete this category?" }, class: "btn btn-outline-danger" do %>
+          <i class="bi bi-trash"></i> Delete
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<% content_for :title, "New Expense" %>
+
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center">Add New Expense</h2>
+      <%= render "form", expense: @expense %>
+      <div class="text-center mt-3">
+        <%= link_to "Back to Expenses", expenses_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+</div>

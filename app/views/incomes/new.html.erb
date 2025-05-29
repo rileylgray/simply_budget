@@ -1,11 +1,13 @@
-<% content_for :title, "New income" %>
+<% content_for :title, "New Income" %>
 
-<h1>New income</h1>
-
-<%= render "form", income: @income %>
-
-<br>
-
-<div>
-  <%= link_to "Back to incomes", incomes_path %>
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center">Add New Income</h2>
+      <%= render "form", income: @income %>
+      <div class="text-center mt-3">
+        <%= link_to "Back to Incomes", incomes_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
 </div>

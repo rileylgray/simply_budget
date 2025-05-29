@@ -2,8 +2,13 @@ class IncomesController < ApplicationController
   before_action :set_income, only: %i[ show edit update destroy ]
 
   # GET /incomes or /incomes.json
+
   def index
-    @incomes = Income.all
+    @incomes = current_user.incomes.includes(:income_categories)
+    if params[:income_category_id].present?
+      @incomes = @incomes.joins(:income_categories).where(income_categories: { id: params[:income_category_id] })
+    end
+    @incomes = @incomes.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   # GET /incomes/1 or /incomes/1.json
@@ -21,7 +26,7 @@ class IncomesController < ApplicationController
 
   # POST /incomes or /incomes.json
   def create
-    @income = Income.new(income_params)
+    @income = current_user.incomes.new(income_params)
 
     respond_to do |format|
       if @income.save
@@ -65,6 +70,13 @@ class IncomesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def income_params
-      params.fetch(:income, {})
+      params.require(:income).permit(
+        :user_id,
+        :source,
+        :amount,
+        :received_on,
+        :notes,
+        :frequency
+      )
     end
 end

@@ -1,0 +1,14 @@
+<% content_for :title, "Edit Income Category" %>
+
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center">Edit Income Category</h2>
+      <%= render "form", income_category: @income_category %>
+      <div class="text-center mt-3">
+        <%= link_to "Show this Category", @income_category, class: "btn btn-outline-primary me-2" %>
+        <%= link_to "Back to Categories", income_categories_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+</div>

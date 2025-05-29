@@ -1,17 +1,41 @@
-<%= form_with(model: income) do |form| %>
+<%= form_with(model: income, local: true) do |form| %>
   <% if income.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(income.errors.count, "error") %> prohibited this income from being saved:</h2>
-
-      <ul>
-        <% income.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading"><%= pluralize(income.errors.count, "error") %> prohibited this income from being saved:</h5>
+      <ul class="mb-0">
+        <% income.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.submit %>
+  <div class="mb-3">
+    <%= form.label :source, "Income Source", class: "form-label" %>
+    <%= form.text_field :source, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :amount, class: "form-label" %>
+    <%= form.number_field :amount, step: 0.01, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :frequency, class: "form-label" %>
+    <%= form.select :frequency, Income.frequencies.keys.map { |k| [k.humanize, k] }, {}, class: "form-select", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :received_on, "Date Received", class: "form-label" %>
+    <%= form.date_field :received_on, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :notes, class: "form-label" %>
+    <%= form.text_area :notes, class: "form-control", rows: 3, style: "resize: vertical;" %>
+  </div>
+
+  <div class="d-grid mb-3">
+    <%= form.submit class: "btn btn-success" %>
   </div>
 <% end %>

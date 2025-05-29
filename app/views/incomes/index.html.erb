@@ -1,50 +1,98 @@
 <% content_for :title, "Incomes" %>
 
-<div class="container mt-4">
+<div class="container mt-4 incomes-index">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">Income Streams</h1>
-    <%= link_to "Add New Income", new_income_path, class: "btn btn-success" %>
+    <h1 class="mb-0 fw-bold text-primary">Income Streams</h1>
+    <%= link_to "Add New Income", new_income_path, class: "btn btn-success shadow-sm" %>
   </div>
 
-  <% if notice %>
-    <div class="alert alert-success">
-      <%= notice %>
+  <!-- Filter Form -->
+  <div class="card mb-3 shadow-sm border-0">
+    <div class="card-body py-3">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+          <%= form_with url: incomes_path, method: :get, local: true, class: "row g-2 align-items-center flex-nowrap mb-0" do |f| %>
+            <div class="col-auto">
+              <%= f.label :income_category_id, "Filter by Category", class: "form-label mb-0 fw-semibold" %>
+            </div>
+            <div class="col-auto">
+              <%= f.collection_select :income_category_id, IncomeCategory.where(user: current_user), :id, :name, { prompt: "All Categories" }, class: "form-select" %>
+            </div>
+            <div class="col-auto">
+              <%= f.submit "Filter", class: "btn btn-outline-primary" %>
+            </div>
+            <% if params[:income_category_id].present? %>
+              <div class="col-auto">
+                <%= link_to "Clear", incomes_path, class: "btn btn-link text-danger" %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="text-muted small flex-grow-1 text-end">
+          Showing <span class="fw-semibold"><%= @incomes.length.zero? ? 0 : @incomes.offset_value + 1 %></span> -
+          <span class="fw-semibold"><%= [@incomes.offset_value + @incomes.length, @incomes.total_count].min %></span>
+          of <span class="fw-semibold"><%= @incomes.total_count %></span> incomes
+        </div>
+      </div>
     </div>
-  <% end %>
+  </div>
 
-  <div class="card shadow">
-    <div class="card-body">
+  <div class="card shadow border-0">
+    <div class="card-body p-0">
       <% if @incomes.any? %>
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle mb-0 incomes-table">
           <thead class="table-light">
             <tr>
-              <th>Source</th>
-              <th>Amount</th>
-              <th>Frequency</th>
-              <th>Date Received</th>
-              <th>Notes</th>
+              <th class="text-nowrap">Source</th>
+              <th class="text-nowrap">Amount</th>
+              <th class="text-nowrap">Category</th>
+              <th class="text-nowrap">Frequency</th>
+              <th class="text-nowrap">Date Received</th>
+              <th class="text-nowrap">Notes</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <% @incomes.each do |income| %>
-              <tr>
-                <td><%= income.source %></td>
-                <td><%= number_to_currency(income.amount) %></td>
+              <tr class="income-row" onclick="window.location='<%= income_path(income) %>'">
+                <td class="fw-semibold"><%= income.source %></td>
+                <td><span class="text-success"><%= number_to_currency(income.amount) %></span></td>
+                <td>
+                  <% if income.income_categories.any? %>
+                    <% income.income_categories.each do |cat| %>
+                      <span class="badge bg-secondary me-1"><%= cat.name %></span>
+                    <% end %>
+                  <% else %>
+                    <span class="text-muted">-</span>
+                  <% end %>
+                </td>
                 <td><span class="badge bg-info text-dark"><%= income.frequency.humanize %></span></td>
                 <td><%= income.received_on.strftime("%b %d, %Y") if income.received_on %></td>
-                <td><%= income.notes.presence || "-" %></td>
                 <td>
-                  <%= link_to "Show", income, class: "btn btn-sm btn-outline-primary" %>
-                  <%= link_to "Edit", edit_income_path(income), class: "btn btn-sm btn-outline-secondary" %>
-                  <%= link_to "Delete", income, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger" %>
+                  <% if income.notes.present? %>
+                    <span title="<%= income.notes %>">
+                      <%= truncate(income.notes, length: 20) %>
+                    </span>
+                  <% else %>
+                    <span class="text-muted">-</span>
+                  <% end %>
+                </td>
+                <td class="text-end" onclick="event.stopPropagation();">
+                  <%= button_to income_path(income), method: :delete,
+                        data: { turbo_confirm: "Are you sure you want to delete this income?" },
+                        class: "btn btn-sm btn-outline-danger shadow-sm", form: { style: "display:inline;" } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
                 </td>
               </tr>
             <% end %>
           </tbody>
         </table>
+        <div class="p-3">
+          <%= paginate @incomes %>
+        </div>
       <% else %>
-        <div class="alert alert-info mb-0">
+        <div class="alert alert-info mb-0 text-center">
           No income records found. Start by adding your first income stream!
         </div>
       <% end %>
