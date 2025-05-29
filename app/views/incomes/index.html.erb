@@ -1,6 +1,6 @@
 <% content_for :title, "Incomes" %>
 
-<div class="container mt-4 incomes-index">
+<div class="container mt-4 index-table">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0 fw-bold text-primary">Income Streams</h1>
     <%= link_to "Add New Income", new_income_path, class: "btn btn-success shadow-sm" %>
@@ -16,7 +16,7 @@
               <%= f.label :income_category_id, "Filter by Category", class: "form-label mb-0 fw-semibold" %>
             </div>
             <div class="col-auto">
-              <%= f.collection_select :income_category_id, IncomeCategory.where(user: current_user), :id, :name, { prompt: "All Categories" }, class: "form-select" %>
+              <%= f.collection_select :income_category_id, IncomeCategory.where(user: current_user), :id, :name, { prompt: "All Categories", selected: params[:income_category_id] }, class: "form-select" %>
             </div>
             <div class="col-auto">
               <%= f.submit "Filter", class: "btn btn-outline-primary" %>
@@ -40,7 +40,7 @@
   <div class="card shadow border-0">
     <div class="card-body p-0">
       <% if @incomes.any? %>
-        <table class="table table-hover align-middle mb-0 incomes-table">
+        <table class="table table-hover align-middle mb-0 index-table">
           <thead class="table-light">
             <tr>
               <th class="text-nowrap">Source</th>
@@ -54,7 +54,7 @@
           </thead>
           <tbody>
             <% @incomes.each do |income| %>
-              <tr class="income-row" onclick="window.location='<%= income_path(income) %>'">
+              <tr class="index-row" onclick="window.location='<%= income_path(income) %>'">
                 <td class="fw-semibold"><%= income.source %></td>
                 <td><span class="text-success"><%= number_to_currency(income.amount) %></span></td>
                 <td>

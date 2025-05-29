@@ -1,0 +1,14 @@
+<% content_for :title, "Edit Budget" %>
+
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center">Edit Budget</h2>
+      <%= render "form", budget: @budget %>
+      <div class="d-flex justify-content-between mt-3">
+        <%= link_to "Show this Budget", @budget, class: "btn btn-outline-primary" %>
+        <%= link_to "Back to Budgets", budgets_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+</div>

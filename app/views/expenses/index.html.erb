@@ -1,6 +1,6 @@
 <% content_for :title, "Expenses" %>
 
-<div class="container mt-4 expenses-index">
+<div class="container mt-4 index-table">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0 fw-bold text-primary">Expenses</h1>
     <%= link_to "Add New Expense", new_expense_path, class: "btn btn-success shadow-sm" %>
@@ -16,7 +16,7 @@
               <%= f.label :expense_category_id, "Filter by Category", class: "form-label mb-0 fw-semibold" %>
             </div>
             <div class="col-auto">
-              <%= f.collection_select :expense_category_id, ExpenseCategory.where(user: current_user), :id, :name, { prompt: "All Categories" }, class: "form-select" %>
+              <%= f.collection_select :expense_category_id, ExpenseCategory.where(user: current_user), :id, :name, { prompt: "All Categories", selected: params[:expense_category_id] }, class: "form-select" %>
             </div>
             <div class="col-auto">
               <%= f.submit "Filter", class: "btn btn-outline-primary" %>
@@ -40,7 +40,7 @@
   <div class="card shadow border-0">
     <div class="card-body p-0">
       <% if @expenses.any? %>
-        <table class="table table-hover align-middle mb-0 expenses-table">
+        <table class="table table-hover align-middle mb-0 index-table">
           <thead class="table-light">
             <tr>
               <th class="text-nowrap">Name</th>
@@ -54,7 +54,7 @@
           </thead>
           <tbody>
             <% @expenses.each do |expense| %>
-              <tr class="expense-row" onclick="window.location='<%= expense_path(expense) %>'">
+              <tr class="index-row" onclick="window.location='<%= expense_path(expense) %>'">
                 <td class="fw-semibold"><%= expense.name %></td>
                 <td><span class="text-success"><%= number_to_currency(expense.amount) %></span></td>
                 <td>

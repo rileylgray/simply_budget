@@ -3,7 +3,6 @@ class User < ApplicationRecord
 
   validates :firstname, presence: true
   validates :lastname, presence: true
-  validates :username, presence: true, uniqueness: true, length: { minimum: 3 }
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, presence: true, length: { minimum: 6 }, if: :password_required?
 
@@ -11,6 +10,7 @@ class User < ApplicationRecord
   has_many :incomes, dependent: :destroy
   has_many :income_categories, dependent: :destroy
   has_many :expense_categories, dependent: :destroy
+  has_many :budgets, dependent: :destroy
 
   def name
     "#{firstname} #{lastname}"

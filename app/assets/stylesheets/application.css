@@ -8,48 +8,33 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
-    body {
+  body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    }
-    .footer {
+  }
+  .footer {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
     z-index: 1030;
-    }
-    main {
+  }
+  main {
     flex: 1 0 auto;
-    }
+  }
 
-.incomes-index .incomes-table th,
-.incomes-index .incomes-table td {
-  vertical-align: middle;
-}
-.incomes-index .income-row:hover {
-  background-color: #f0f4ff !important;
-  transition: background 0.2s;
-}
-.incomes-index .btn-outline-danger {
-  border-width: 2px;
-}
-.incomes-index .fw-semibold {
-  font-weight: 600;
-}
-
-.expenses-index .expenses-table th,
-.expenses-index .expenses-table td {
-  vertical-align: middle;
-}
-.expenses-index .expense-row:hover {
-  background-color: #f0f4ff !important;
-  transition: background 0.2s;
-}
-.expenses-index .btn-outline-danger {
-  border-width: 2px;
-}
-.expenses-index .fw-semibold {
-  font-weight: 600;
-}
+  .index-table th,
+  .index-table td {
+    vertical-align: middle;
+  }
+  .index-row:hover {
+    background-color: #f0f4ff !important;
+    transition: background 0.2s;
+  }
+  .btn-outline-danger {
+    border-width: 2px;
+  }
+  .fw-semibold {
+    font-weight: 600;
+  }

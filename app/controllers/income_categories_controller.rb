@@ -3,7 +3,7 @@ class IncomeCategoriesController < ApplicationController
 
   # GET /income_categories or /income_categories.json
   def index
-    @income_categories = IncomeCategory.all
+    @income_categories = current_user.income_categories.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   # GET /income_categories/1 or /income_categories/1.json

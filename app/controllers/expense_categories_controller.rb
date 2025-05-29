@@ -3,7 +3,7 @@ class ExpenseCategoriesController < ApplicationController
 
   # GET /expense_categories or /expense_categories.json
   def index
-    @expense_categories = ExpenseCategory.all
+    @expense_categories = current_user.expense_categories.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   # GET /expense_categories/1 or /expense_categories/1.json

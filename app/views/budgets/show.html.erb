@@ -1,0 +1,36 @@
+<% content_for :title, "Budget Details" %>
+
+<div class="container mt-5" style="max-width: 600px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title mb-4 text-center">Budget Details</h2>
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item">
+          <strong>Expense Category:</strong>
+          <%= @budget.expense_category&.name || "-" %>
+        </li>
+        <li class="list-group-item">
+          <strong>Period:</strong>
+          <%= @budget.time_frame.titleize %>
+        </li>
+        <li class="list-group-item">
+          <strong>Amount:</strong>
+          <%= number_to_currency(@budget.amount) %>
+        </li>
+        <li class="list-group-item">
+          <strong>Created At:</strong>
+          <%= @budget.created_at.strftime("%b %d, %Y") %>
+        </li>
+        <li class="list-group-item">
+          <strong>Last Updated:</strong>
+          <%= @budget.updated_at.strftime("%b %d, %Y") %>
+        </li>
+      </ul>
+      <div class="d-flex justify-content-between">
+        <%= link_to "Edit", edit_budget_path(@budget), class: "btn btn-outline-primary" %>
+        <%= link_to "Back to Budgets", budgets_path, class: "btn btn-outline-secondary" %>
+        <%= button_to "Delete", @budget, method: :delete, data: { turbo_confirm: "Are you sure you want to delete this budget?" }, class: "btn btn-outline-danger" %>
+      </div>
+    </div>
+  </div>
+</div>

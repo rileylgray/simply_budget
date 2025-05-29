@@ -1,0 +1,31 @@
+<%= form_with(model: budget, local: true) do |form| %>
+  <% if budget.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="alert-heading"><%= pluralize(budget.errors.count, "error") %> prohibited this budget from being saved:</h5>
+      <ul class="mb-0">
+        <% budget.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :expense_category_id, "Expense Category", class: "form-label" %>
+    <%= form.collection_select :expense_category_id, ExpenseCategory.where(user: current_user), :id, :name, { prompt: "Select a category" }, class: "form-select", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :amount, "Budget Amount", class: "form-label" %>
+    <%= form.number_field :amount, step: 0.01, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :time_frame, "Period", class: "form-label" %>
+    <%= form.select :time_frame, Budget.time_frames.keys.map { |tf| [tf.titleize, tf] }, { prompt: "Select time frame" }, class: "form-select", required: true %>
+  </div>
+
+  <div class="d-grid mb-3">
+    <%= form.submit "Save Budget", class: "btn btn-success" %>
+  </div>
+<% end %>

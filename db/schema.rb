@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_29_210823) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_29_232339) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "budgets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "expense_category_id", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "time_frame", default: 0, null: false
+    t.index ["expense_category_id"], name: "index_budgets_on_expense_category_id"
+    t.index ["user_id"], name: "index_budgets_on_user_id"
+  end
 
   create_table "expense_categories", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -81,15 +92,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_29_210823) do
     t.string "lastname"
     t.string "email", null: false
     t.string "password_digest"
-    t.string "username"
     t.string "role"
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "budgets", "expense_categories"
+  add_foreign_key "budgets", "users"
   add_foreign_key "expense_categories", "expenses"
   add_foreign_key "expense_categories", "users"
   add_foreign_key "expense_categorizations", "expense_categories"

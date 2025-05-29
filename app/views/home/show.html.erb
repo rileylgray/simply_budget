@@ -33,12 +33,6 @@
               </div>
             </div>
           </div>
-          <% if logged_in? %>
-            <a href="<%= user_path(current_user) %>" class="btn btn-primary btn-lg">Go to Your Profile</a>
-          <% else %>
-            <a href="<%= sign_in_path %>" class="btn btn-primary btn-lg me-2">Sign In</a>
-            <a href="<%= new_session_path %>" class="btn btn-outline-primary btn-lg">Sign Up</a>
-          <% end %>
         </div>
       </div>
     </div>
