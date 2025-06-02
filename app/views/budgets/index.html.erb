@@ -3,7 +3,9 @@
 <div class="container mt-4 index-table">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0 fw-bold text-primary">Budgets</h1>
-    <%= link_to "Add New Budget", new_budget_path, class: "btn btn-success shadow-sm" %>
+    <%= link_to new_budget_path, class: "btn btn-success shadow-sm", title: "Add New Budget" do %>
+      <i class="bi bi-plus-lg"></i>
+    <% end %>
   </div>
 
   <!-- Filter Form & Results Info -->
@@ -13,7 +15,7 @@
         <div>
           <%= form_with url: budgets_path, method: :get, local: true, class: "row g-2 align-items-center flex-nowrap mb-0" do |f| %>
             <div class="col-auto">
-              <%= f.label :expense_category_id, "Filter by Category", class: "form-label mb-0 fw-semibold" %>
+              <%= f.label :expense_category_id, "Filter by Category", class: "form-label mb-0 fw-semibold d-none d-sm-inline" %>
             </div>
             <div class="col-auto">
               <%= f.collection_select :expense_category_id, ExpenseCategory.where(user: current_user), :id, :name,
@@ -31,9 +33,9 @@
           <% end %>
         </div>
         <div class="text-muted small flex-grow-1 text-end">
-          Showing <span class="fw-semibold"><%= @budgets.length.zero? ? 0 : @budgets.offset_value + 1 %></span> -
+          <span class="fw-semibold"><%= @budgets.length.zero? ? 0 : @budgets.offset_value + 1 %></span> -
           <span class="fw-semibold"><%= [@budgets.offset_value + @budgets.length, @budgets.total_count].min %></span>
-          of <span class="fw-semibold"><%= @budgets.total_count %></span> budgets
+          of <span class="fw-semibold"><%= @budgets.total_count %></span> results
         </div>
       </div>
     </div>
@@ -42,32 +44,34 @@
   <div class="card shadow border-0">
     <div class="card-body p-0">
       <% if @budgets.any? %>
-        <table class="table table-hover align-middle mb-0 index-table">
-          <thead class="table-light">
-            <tr>
-              <th class="text-nowrap">Expense Category</th>
-              <th class="text-nowrap">Amount</th>
-              <th class="text-nowrap">Created</th>
-              <th class="text-nowrap">Updated</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @budgets.each do |budget| %>
-              <tr class="index-row" onclick="window.location='<%= budget_path(budget) %>'">
-                <td class="fw-semibold"><%= budget.expense_category&.name || "-" %></td>
-                <td><span class="text-success"><%= number_to_currency(budget.amount) %></span></td>
-                <td><%= budget.created_at.strftime("%b %d, %Y") %></td>
-                <td><%= budget.updated_at.strftime("%b %d, %Y") %></td>
-                <td class="text-end" onclick="event.stopPropagation();">
-                  <%= button_to budget_path(budget), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger", form: { style: "display:inline;" } do %>
-                    <i class="bi bi-trash"></i>
-                  <% end %>
-                </td>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 index-table">
+            <thead class="table-light">
+              <tr>
+                <th class="text-nowrap">Expense Category</th>
+                <th class="text-nowrap">Amount</th>
+                <th class="text-nowrap d-none d-sm-table-cell">Created</th>
+                <th class="text-nowrap d-none d-sm-table-cell">Updated</th>
+                <th></th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% @budgets.each do |budget| %>
+                <tr class="index-row" onclick="window.location='<%= budget_path(budget) %>'">
+                  <td class="fw-semibold"><%= budget.expense_category&.name || "-" %></td>
+                  <td><span class="text-success"><%= number_to_currency(budget.amount) %></span></td>
+                  <td class="d-none d-sm-table-cell"><%= budget.created_at.strftime("%b %d, %Y") %></td>
+                  <td class="d-none d-sm-table-cell"><%= budget.updated_at.strftime("%b %d, %Y") %></td>
+                  <td class="text-end" onclick="event.stopPropagation();">
+                    <%= button_to budget_path(budget), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger", form: { style: "display:inline;" } do %>
+                      <i class="bi bi-trash"></i>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
         <div class="p-3">
           <%= paginate @budgets %>
         </div>
