@@ -1,68 +1,49 @@
-<%# Ruby: Calculate this month's totals %>
+<%# Ruby: Calculate this month's and year's totals %>
 <%
   start_of_month = Date.current.beginning_of_month
   end_of_month = Date.current.end_of_month
+  start_of_year = Date.current.beginning_of_year
+  end_of_year = Date.current.end_of_year
 
   monthly_income = Income.where(user: current_user, received_on: start_of_month..end_of_month).sum(:amount)
   monthly_expenses = Expense.where(user: current_user, spent_on: start_of_month..end_of_month).sum(:amount)
   remaining = [monthly_income - monthly_expenses, 0].max
+
+  yearly_income = Income.where(user: current_user, received_on: start_of_year..end_of_year).sum(:amount)
+  yearly_expenses = Expense.where(user: current_user, spent_on: start_of_year..end_of_year).sum(:amount)
+  yearly_remaining = [yearly_income - yearly_expenses, 0].max
+
+  # Gather monthly spending by category, including uncategorized
+  category_spending = Expense.left_joins(:expense_categories)
+    .where(user: current_user, spent_on: start_of_month..end_of_month)
+    .group('COALESCE(expense_categories.name, \'Uncategorized\')')
+    .sum(:amount)
+
+  category_labels = category_spending.keys
+  category_amounts = category_spending.values
+
+  # Gather yearly spending by category, including uncategorized
+  yearly_category_spending = Expense.left_joins(:expense_categories)
+    .where(user: current_user, spent_on: start_of_year..end_of_year)
+    .group('COALESCE(expense_categories.name, \'Uncategorized\')')
+    .sum(:amount)
+
+  yearly_category_labels = yearly_category_spending.keys
+  yearly_category_amounts = yearly_category_spending.values
 %>
-<div class="container mt-5">
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h5 class="card-title mb-4">Spending vs Income (This Month)</h5>
-      <canvas id="spendingIncomePie" width="400" height="400"></canvas>
-      <% if monthly_income > 0 && (monthly_expenses.to_f / monthly_income.to_f) < 0.5 %>
-        <div class="text-center mt-4">
-          <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/penguin-1297273_1280.png"
-               alt="Cool Penguin"
-               style="max-width: 150px; width: 100%;"
-               title="You’re cool with your money!">
-          <div class="fw-bold mt-2 text-success">Nice! You’ve spent less than 50% of your income!</div>
-        </div>
-      <% end %>
-    </div>
-  </div>
+
+<div class="container m-5">
+  <turbo-frame id="charts">
+    <%= render "charts",
+      monthly_income: monthly_income,
+      monthly_expenses: monthly_expenses,
+      remaining: remaining,
+      yearly_income: yearly_income,
+      yearly_expenses: yearly_expenses,
+      yearly_remaining: yearly_remaining,
+      category_labels: category_labels,
+      category_amounts: category_amounts,
+      yearly_category_labels: yearly_category_labels,
+      yearly_category_amounts: yearly_category_amounts %>
+  </turbo-frame>
 </div>
-
-
-
-<script>
-  $(function() {
-    const ctx = document.getElementById('spendingIncomePie').getContext('2d');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Spent', 'Remaining Income'],
-        datasets: [{
-          data: [<%= monthly_expenses %>, <%= remaining %>],
-          backgroundColor: [
-            'rgba(220, 53, 69, 0.7)',    // Bootstrap danger
-            'rgba(25, 135, 84, 0.7)'     // Bootstrap success
-          ],
-          borderColor: [
-            'rgba(220, 53, 69, 1)',
-            'rgba(25, 135, 84, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            position: 'bottom'
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                let label = context.label || '';
-                let value = context.parsed || 0;
-                return `${label}: $${value.toLocaleString()}`;
-              }
-            }
-          }
-        }
-      }
-    });
-  });
-</script>

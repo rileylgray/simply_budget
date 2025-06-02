@@ -1,0 +1,54 @@
+<div data-controller="charts"
+     data-charts-monthly-income-value="<%= monthly_income %>"
+     data-charts-monthly-expenses-value="<%= monthly_expenses %>"
+     data-charts-remaining-value="<%= remaining %>"
+     data-charts-yearly-income-value="<%= yearly_income %>"
+     data-charts-yearly-expenses-value="<%= yearly_expenses %>"
+     data-charts-yearly-remaining-value="<%= yearly_remaining %>"
+     data-charts-category-labels-value="<%= raw category_labels.to_json %>"
+     data-charts-category-amounts-value="<%= raw category_amounts.to_json %>"
+     data-charts-yearly-category-labels-value="<%= raw yearly_category_labels.to_json %>"
+     data-charts-yearly-category-amounts-value="<%= raw yearly_category_amounts.to_json %>">
+  <div class="row g-4">
+    <div class="col-12 col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Spending vs Income (This Month)</h5>
+          <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center">
+            <canvas id="spendingIncomePie"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Spending vs Income (This Year)</h5>
+          <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center">
+            <canvas id="yearlySpendingIncomePie"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Spending by Category (This Month)</h5>
+          <div style="height:300px;" class="d-flex align-items-center justify-content-center">
+            <canvas id="monthlyCategoryBar"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Spending by Category (This Year)</h5>
+          <div style="height:300px;" class="d-flex align-items-center justify-content-center">
+            <canvas id="yearlyCategoryBar"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

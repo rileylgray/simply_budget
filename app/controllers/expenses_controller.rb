@@ -31,6 +31,12 @@ class ExpensesController < ApplicationController
       if @expense.save
         format.html { redirect_to @expense, notice: "Expense was successfully created." }
         format.json { render :show, status: :created, location: @expense }
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "charts",
+            partial: "home/charts"
+          )
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @expense.errors, status: :unprocessable_entity }
