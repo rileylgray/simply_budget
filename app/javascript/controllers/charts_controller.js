@@ -92,7 +92,7 @@ export default class extends Controller {
         }
       });
     }
-
+    debugger
     // Monthly Category Bar
     if (this.categoryLabelsValue.length > 0) {
       const barCtx = document.getElementById('monthlyCategoryBar').getContext('2d');

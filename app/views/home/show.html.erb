@@ -32,18 +32,30 @@
   yearly_category_amounts = yearly_category_spending.values
 %>
 
-<div class="container m-5">
-  <turbo-frame id="charts">
-    <%= render "charts",
-      monthly_income: monthly_income,
-      monthly_expenses: monthly_expenses,
-      remaining: remaining,
-      yearly_income: yearly_income,
-      yearly_expenses: yearly_expenses,
-      yearly_remaining: yearly_remaining,
-      category_labels: category_labels,
-      category_amounts: category_amounts,
-      yearly_category_labels: yearly_category_labels,
-      yearly_category_amounts: yearly_category_amounts %>
-  </turbo-frame>
+<div class="container index-table">
+  <% if monthly_income.zero? && monthly_expenses.zero? && yearly_income.zero? && yearly_expenses.zero? %>
+    <div class="alert alert-info mt-5 text-center" style="max-width: 600px; margin: 0 auto;">
+      <h4 class="mb-3">Welcome to Bugeting!</h4>
+      <p>
+        To get started, add your first income stream and record your expenses. This platform helps you track your finances, visualize your spending, and set budgets for different categories.
+      </p>
+      <p>
+        Use the navigation menu to add <strong>Income</strong> and <strong>Expenses</strong>. Once you have data, you'll see charts and insights here to help you manage your budget more effectively.
+      </p>
+    </div>
+  <% else %>
+    <turbo-frame id="charts" class="w-100 mb-3">
+      <%= render "charts",
+        monthly_income: monthly_income,
+        monthly_expenses: monthly_expenses,
+        remaining: remaining,
+        yearly_income: yearly_income,
+        yearly_expenses: yearly_expenses,
+        yearly_remaining: yearly_remaining,
+        category_labels: category_labels,
+        category_amounts: category_amounts,
+        yearly_category_labels: yearly_category_labels,
+        yearly_category_amounts: yearly_category_amounts %>
+    </turbo-frame>
+  <% end %>
 </div>

@@ -1,51 +1,102 @@
-<div data-controller="charts"
+<div data-controller="charts charts-toggle"
      data-charts-monthly-income-value="<%= monthly_income %>"
      data-charts-monthly-expenses-value="<%= monthly_expenses %>"
      data-charts-remaining-value="<%= remaining %>"
      data-charts-yearly-income-value="<%= yearly_income %>"
      data-charts-yearly-expenses-value="<%= yearly_expenses %>"
      data-charts-yearly-remaining-value="<%= yearly_remaining %>"
-     data-charts-category-labels-value="<%= raw category_labels.to_json %>"
-     data-charts-category-amounts-value="<%= raw category_amounts.to_json %>"
-     data-charts-yearly-category-labels-value="<%= raw yearly_category_labels.to_json %>"
-     data-charts-yearly-category-amounts-value="<%= raw yearly_category_amounts.to_json %>">
+     data-charts-category-labels-value="<%= category_labels.to_json %>"
+     data-charts-category-amounts-value="<%= category_amounts.to_json %>"
+     data-charts-yearly-category-labels-value="<%= yearly_category_labels.to_json %>"
+     data-charts-yearly-category-amounts-value="<%= yearly_category_amounts.to_json %>">
+
+  <div class="position-relative mb-4">
+    <div class="d-flex justify-content-end mb-3" style="z-index: 2; position: relative;">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="chartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Charts
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chartDropdown" id="chart-toggle-menu">
+          <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="monthly" data-chart-group="monthly">
+              <span class="me-2 chart-check" data-chart-check="monthly"></span>
+              Toggle Monthly Charts
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="yearly" data-chart-group="yearly">
+              <span class="me-2 chart-check" data-chart-check="yearly"></span>
+              Toggle Yearly Charts
+            </a>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="spendingIncomePie">
+              <span class="me-2 chart-check" data-chart-check="spendingIncomePie"></span>
+              Spending vs Income (This Month)
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="monthlyCategoryBar">
+              <span class="me-2 chart-check" data-chart-check="monthlyCategoryBar"></span>
+              Spending by Category (This Month)
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="yearlySpendingIncomePie">
+              <span class="me-2 chart-check" data-chart-check="yearlySpendingIncomePie"></span>
+              Spending vs Income (This Year)
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="yearlyCategoryBar">
+              <span class="me-2 chart-check" data-chart-check="yearlyCategoryBar"></span>
+              Spending by Category (This Year)
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row g-2 mb-4" id="pie-charts-row" style="max-width: 700px; margin: 0 auto;">
+        <div class="col-12 col-md-6 pie-chart-col" id="spendingIncomePie-card">
+            <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Spending vs Income (This Month)</h5>
+                <div class="ratio" style="--bs-aspect-ratio: 70%;">
+                <canvas id="spendingIncomePie" style="max-width: 300px; max-height: 300px; margin: 0 auto;"></canvas>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 pie-chart-col" id="yearlySpendingIncomePie-card">
+            <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-4">Spending vs Income (This Year)</h5>
+                <div class="ratio" style="--bs-aspect-ratio: 70%;">
+                <canvas id="yearlySpendingIncomePie" style="max-width: 300px; max-height: 300px; margin: 0 auto;"></canvas>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
   <div class="row g-4">
-    <div class="col-12 col-md-6">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <h5 class="card-title mb-4">Spending vs Income (This Month)</h5>
-          <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center">
-            <canvas id="spendingIncomePie"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6">
-      <div class="card shadow-sm h-100">
-        <div class="card-body">
-          <h5 class="card-title mb-4">Spending vs Income (This Year)</h5>
-          <div class="ratio ratio-1x1 d-flex align-items-center justify-content-center">
-            <canvas id="yearlySpendingIncomePie"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12">
-      <div class="card shadow-sm h-100">
+    <div class="col-12" id="monthlyCategoryBar-card">
+      <div class="card shadow-sm h-100" style="max-width: 700px; margin: 0 auto;">
         <div class="card-body">
           <h5 class="card-title mb-4">Spending by Category (This Month)</h5>
-          <div style="height:300px;" class="d-flex align-items-center justify-content-center">
-            <canvas id="monthlyCategoryBar"></canvas>
+          <div style="height:220px;" class="d-flex align-items-center justify-content-center">
+            <canvas id="monthlyCategoryBar" style="max-width: 600px;"></canvas>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-12">
-      <div class="card shadow-sm h-100">
+    <div class="col-12" id="yearlyCategoryBar-card">
+      <div class="card shadow-sm h-100" style="max-width: 700px; margin: 0 auto;">
         <div class="card-body">
           <h5 class="card-title mb-4">Spending by Category (This Year)</h5>
-          <div style="height:300px;" class="d-flex align-items-center justify-content-center">
-            <canvas id="yearlyCategoryBar"></canvas>
+          <div style="height:220px;" class="d-flex align-items-center justify-content-center">
+            <canvas id="yearlyCategoryBar" style="max-width: 600px;"></canvas>
           </div>
         </div>
       </div>
