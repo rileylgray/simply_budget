@@ -82,5 +82,5 @@ production:
   primary: &primary_production
     <<: *default
     database: bugeting_production
-    username: <%= ENV["BUGETING_DATABASE_USERNAME"] %>
+    username: webuser
     password: <%= ENV["BUGETING_DATABASE_PASSWORD"] %>
