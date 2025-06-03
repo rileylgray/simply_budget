@@ -146,8 +146,8 @@ export default class extends Controller {
           datasets: [{
             label: 'Spent',
             data: this.yearlyCategoryAmountsValue,
-            backgroundColor: 'rgba(25, 135, 84, 0.7)',
-            borderColor: 'rgba(25, 135, 84, 1)',
+            backgroundColor: 'rgba(220, 53, 69, 0.7)',
+            borderColor: 'rgba(220, 53, 69, 1)',
             borderWidth: 1
           }]
         },

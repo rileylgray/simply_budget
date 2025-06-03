@@ -13,26 +13,37 @@ const GROUPS = {
 }
 
 export default class extends Controller {
-    adjustPieChartColumns() {
-        const monthPie = document.getElementById("spendingIncomePie-card");
-        const yearPie = document.getElementById("yearlySpendingIncomePie-card");
-        const monthVisible = monthPie && monthPie.style.display !== "none";
-        const yearVisible = yearPie && yearPie.style.display !== "none";
+adjustPieChartColumns() {
+  const monthPie = document.getElementById("spendingIncomePie-card");
+  const yearPie = document.getElementById("yearlySpendingIncomePie-card");
+  const pieChartsRow = document.getElementById("pie-charts-row");
+  const monthVisible = monthPie && monthPie.style.display !== "none";
+  const yearVisible = yearPie && yearPie.style.display !== "none";
 
-        // Remove all col classes first
-        [monthPie, yearPie].forEach(card => {
-            if (card) card.classList.remove("col-12", "col-md-6");
-        });
-
-        if (monthVisible && yearVisible) {
-            if (monthPie) monthPie.classList.add("col-12", "col-md-6");
-            if (yearPie) yearPie.classList.add("col-12", "col-md-6");
-        } else if (monthVisible) {
-            if (monthPie) monthPie.classList.add("col-12");
-        } else if (yearVisible) {
-            if (yearPie) yearPie.classList.add("col-12");
-        }
+  // Remove all col classes and flex utilities first
+  [monthPie, yearPie].forEach(card => {
+    if (card) {
+      card.classList.remove("col-12", "col-md-6", "d-flex", "justify-content-center");
     }
+  });
+
+  if (pieChartsRow) {
+    pieChartsRow.classList.remove("justify-content-center");
+    pieChartsRow.classList.remove("justify-content-start");
+  }
+
+  if (monthVisible && yearVisible) {
+    if (monthPie) monthPie.classList.add("col-12", "col-md-6");
+    if (yearPie) yearPie.classList.add("col-12", "col-md-6");
+    if (pieChartsRow) pieChartsRow.classList.add("justify-content-center");
+  } else if (monthVisible) {
+    if (monthPie) monthPie.classList.add("col-12", "d-flex", "justify-content-center");
+    if (pieChartsRow) pieChartsRow.classList.add("justify-content-center");
+  } else if (yearVisible) {
+    if (yearPie) yearPie.classList.add("col-12", "d-flex", "justify-content-center");
+    if (pieChartsRow) pieChartsRow.classList.add("justify-content-center");
+  }
+}
 
     toggleCharts(charts) {
     let state = this.loadState();
