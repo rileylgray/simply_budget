@@ -12,7 +12,7 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       redirect_to root_path, notice: "User was successfully created."
     else
-      render :new
+    render :new, status: :unprocessable_entity
     end
   end
 
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       redirect_to @user, notice: "User was successfully updated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
