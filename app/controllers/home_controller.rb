@@ -42,22 +42,26 @@ class HomeController < ApplicationController
 
   private
 
-  def income_by_category_for_period(user, period_start, period_end)
-    result = Hash.new(0)
-    Income.where(user: user).includes(:income_categories).find_each do |income|
-      count = occurrences_in_period(
-        start_date: income.received_on,
-        end_date: income.try(:end_date),
-        frequency: income.frequency,
-        period_start: period_start,
-        period_end: period_end
-      )
+def income_by_category_for_period(user, period_start, period_end)
+  result = Hash.new(0)
+  Income.where(user: user).includes(:income_categories).find_each do |income|
+    count = occurrences_in_period(
+      start_date: income.received_on,
+      end_date: income.try(:end_date),
+      frequency: income.frequency,
+      period_start: period_start,
+      period_end: period_end
+    )
+    if income.income_categories.any?
       income.income_categories.each do |cat|
         result[cat.name] += income.amount * count
       end
+    else
+      result["Uncategorized"] += income.amount * count
     end
-    result
   end
+  result
+end
 
   def total_income_for_period(user, period_start, period_end)
     Income.where(user: user).sum do |income|
