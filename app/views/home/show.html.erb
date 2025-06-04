@@ -1,39 +1,5 @@
-<%# Ruby: Calculate this month's and year's totals %>
-<%
-  start_of_month = Date.current.beginning_of_month
-  end_of_month = Date.current.end_of_month
-  start_of_year = Date.current.beginning_of_year
-  end_of_year = Date.current.end_of_year
-
-  monthly_income = Income.where(user: current_user, received_on: start_of_month..end_of_month).sum(:amount)
-  monthly_expenses = Expense.where(user: current_user, spent_on: start_of_month..end_of_month).sum(:amount)
-  remaining = [monthly_income - monthly_expenses, 0].max
-
-  yearly_income = Income.where(user: current_user, received_on: start_of_year..end_of_year).sum(:amount)
-  yearly_expenses = Expense.where(user: current_user, spent_on: start_of_year..end_of_year).sum(:amount)
-  yearly_remaining = [yearly_income - yearly_expenses, 0].max
-
-  # Gather monthly spending by category, including uncategorized
-  category_spending = Expense.left_joins(:expense_categories)
-    .where(user: current_user, spent_on: start_of_month..end_of_month)
-    .group('COALESCE(expense_categories.name, \'Uncategorized\')')
-    .sum(:amount)
-
-  category_labels = category_spending.keys
-  category_amounts = category_spending.values
-
-  # Gather yearly spending by category, including uncategorized
-  yearly_category_spending = Expense.left_joins(:expense_categories)
-    .where(user: current_user, spent_on: start_of_year..end_of_year)
-    .group('COALESCE(expense_categories.name, \'Uncategorized\')')
-    .sum(:amount)
-
-  yearly_category_labels = yearly_category_spending.keys
-  yearly_category_amounts = yearly_category_spending.values
-%>
-
 <div class="container index-table">
-  <% if monthly_income.zero? && monthly_expenses.zero? && yearly_income.zero? && yearly_expenses.zero? %>
+  <% if @monthly_income.zero? && @monthly_expenses.zero? && @yearly_income.zero? && @yearly_expenses.zero? %>
     <div class="alert alert-info mt-5 text-center" style="max-width: 600px; margin: 0 auto;">
       <h4 class="mb-3">Welcome to Bugeting!</h4>
       <p>
@@ -46,16 +12,16 @@
   <% else %>
     <turbo-frame id="charts" class="w-100 mb-3">
       <%= render "charts",
-        monthly_income: monthly_income,
-        monthly_expenses: monthly_expenses,
-        remaining: remaining,
-        yearly_income: yearly_income,
-        yearly_expenses: yearly_expenses,
-        yearly_remaining: yearly_remaining,
-        category_labels: category_labels,
-        category_amounts: category_amounts,
-        yearly_category_labels: yearly_category_labels,
-        yearly_category_amounts: yearly_category_amounts %>
+        monthly_income: @monthly_income,
+        monthly_expenses: @monthly_expenses,
+        remaining: @remaining,
+        yearly_income: @yearly_income,
+        yearly_expenses: @yearly_expenses,
+        yearly_remaining: @yearly_remaining,
+        category_labels: @category_labels,
+        category_amounts: @category_amounts,
+        yearly_category_labels: @yearly_category_labels,
+        yearly_category_amounts: @yearly_category_amounts %>
     </turbo-frame>
   <% end %>
 </div>

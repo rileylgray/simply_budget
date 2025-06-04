@@ -26,6 +26,12 @@
   </div>
 
   <div class="mb-3">
+    <%= form.label :income_category_ids, "Income Categories", class: "form-label" %>
+    <%= form.collection_select :income_category_ids, IncomeCategory.where(user: current_user), :id, :name, { prompt: "Select categories", selected: income.income_category_ids }, { multiple: true, class: "form-select" } %>
+    <small class="form-text text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple categories.</small>
+  </div>
+
+  <div class="mb-3">
     <%= form.label :received_on, "Date Received/Started", class: "form-label" %>
     <%= form.date_field :received_on, class: "form-control", required: true %>
   </div>

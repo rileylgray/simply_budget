@@ -76,7 +76,8 @@ class IncomesController < ApplicationController
         :amount,
         :received_on,
         :notes,
-        :frequency
+        :frequency,
+        income_category_ids: []
       )
     end
 end
