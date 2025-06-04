@@ -8,10 +8,30 @@
      data-charts-category-labels-value="<%= category_labels.to_json %>"
      data-charts-category-amounts-value="<%= category_amounts.to_json %>"
      data-charts-yearly-category-labels-value="<%= yearly_category_labels.to_json %>"
-     data-charts-yearly-category-amounts-value="<%= yearly_category_amounts.to_json %>">
+     data-charts-yearly-category-amounts-value="<%= yearly_category_amounts.to_json %>"
+     data-charts-category-colours-value="<%= category_labels.map { |label| @category_colours[label] || '#F44336' }.to_json %>"
+     data-charts-yearly-category-colours-value="<%= yearly_category_labels.map { |label| @yearly_category_colours[label] || '#F44336' }.to_json %>"
+     data-charts-income-category-labels-month-value="<%= income_category_labels_month.to_json %>"
+     data-charts-income-category-amounts-month-value="<%= income_category_amounts_month.to_json %>"
+     data-charts-income-category-labels-year-value="<%= income_category_labels_year.to_json %>"
+     data-charts-income-category-amounts-year-value="<%= income_category_amounts_year.to_json %>"
+     data-charts-income-category-colours-value="<%= income_category_labels_month.map { |label| @income_category_colours[label] || '#4CAF50' }.to_json %>"
+     data-charts-income-category-colours-year-value="<%= income_category_labels_year.map { |label| @income_category_colours_year[label] || '#4CAF50' }.to_json %>">
 
   <div class="position-relative mb-4">
     <div class="d-flex justify-content-end mb-3" style="z-index: 2; position: relative;">
+      <div data-controller="charts-date" class="me-2">
+        <select data-action="change->charts-date#change" data-charts-date-target="month" class="form-select d-inline w-auto me-1">
+          <% 1.upto(12) do |m| %>
+            <option value="<%= m %>" <%= m == (@selected_month || Date.current.month) ? "selected" : "" %>><%= Date::MONTHNAMES[m] %></option>
+          <% end %>
+        </select>
+        <select data-action="change->charts-date#change" data-charts-date-target="year" class="form-select d-inline w-auto">
+          <% (Date.current.year - 5).upto(Date.current.year + 1) do |y| %>
+            <option value="<%= y %>" <%= y == (@selected_year || Date.current.year) ? "selected" : "" %>><%= y %></option>
+          <% end %>
+        </select>
+      </div>
       <div class="dropdown">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="chartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           Charts
@@ -43,6 +63,12 @@
             </a>
           </li>
           <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="monthlyIncomeCategoryBar">
+              <span class="me-2 chart-check" data-chart-check="monthlyIncomeCategoryBar"></span>
+              Income by Category (This Month)
+            </a>
+          </li>
+          <li>
             <a class="dropdown-item" href="#" data-chart-toggle="yearlySpendingIncomePie">
               <span class="me-2 chart-check" data-chart-check="yearlySpendingIncomePie"></span>
               Spending vs Income (This Year)
@@ -52,6 +78,12 @@
             <a class="dropdown-item" href="#" data-chart-toggle="yearlyCategoryBar">
               <span class="me-2 chart-check" data-chart-check="yearlyCategoryBar"></span>
               Spending by Category (This Year)
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" data-chart-toggle="yearlyIncomeCategoryBar">
+              <span class="me-2 chart-check" data-chart-check="yearlyIncomeCategoryBar"></span>
+              Income by Category (This Year)
             </a>
           </li>
         </ul>
@@ -96,6 +128,26 @@
           <h5 class="card-title mb-4">Spending by Category (This Year)</h5>
           <div style="height:220px;" class="d-flex align-items-center justify-content-center">
             <canvas id="yearlyCategoryBar" style="max-width: 600px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12" id="monthlyIncomeCategoryBar-card">
+      <div class="card shadow-sm h-100" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Income by Category (This Month)</h5>
+          <div style="height:220px;" class="d-flex align-items-center justify-content-center">
+            <canvas id="monthlyIncomeCategoryBar" style="max-width: 600px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12" id="yearlyIncomeCategoryBar-card">
+      <div class="card shadow-sm h-100" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Income by Category (This Year)</h5>
+          <div style="height:220px;" class="d-flex align-items-center justify-content-center">
+            <canvas id="yearlyIncomeCategoryBar" style="max-width: 600px;"></canvas>
           </div>
         </div>
       </div>

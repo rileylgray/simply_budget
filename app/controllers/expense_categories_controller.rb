@@ -60,11 +60,10 @@ class ExpenseCategoriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_expense_category
-      @expense_category = ExpenseCategory.find(params.expect(:id))
+      @expense_category = ExpenseCategory.find(params[:id])
     end
-
     # Only allow a list of trusted parameters through.
     def expense_category_params
-      params.require(:expense_category).permit(:name, :description)
+      params.require(:expense_category).permit(:name, :description, :colour)
     end
 end

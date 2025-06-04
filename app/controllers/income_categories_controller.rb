@@ -60,11 +60,11 @@ class IncomeCategoriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_income_category
-      @income_category = IncomeCategory.find(params.expect(:id))
+      @income_category = IncomeCategory.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def income_category_params
-      params.require(:income_category).permit(:name, :description)
+      params.require(:income_category).permit(:name, :description, :colour)
     end
 end

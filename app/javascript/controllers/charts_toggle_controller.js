@@ -3,13 +3,16 @@ import { Controller } from "@hotwired/stimulus"
 const CHARTS = [
   "spendingIncomePie",
   "monthlyCategoryBar",
+  "monthlyIncomeCategoryBar",
   "yearlySpendingIncomePie",
-  "yearlyCategoryBar"
+  "yearlyCategoryBar",
+  "yearlyIncomeCategoryBar"
 ]
 
+
 const GROUPS = {
-  monthly: ["spendingIncomePie", "monthlyCategoryBar"],
-  yearly: ["yearlySpendingIncomePie", "yearlyCategoryBar"]
+  monthly: ["spendingIncomePie", "monthlyCategoryBar", "monthlyIncomeCategoryBar"],
+  yearly: ["yearlySpendingIncomePie", "yearlyCategoryBar", "yearlyIncomeCategoryBar"]
 }
 
 export default class extends Controller {

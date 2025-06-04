@@ -9,6 +9,12 @@
           <strong>Name:</strong> <%= @income_category.name %>
         </li>
         <li class="list-group-item">
+          <strong>Colour</strong>:
+          <span class="badge rounded-pill" style="background-color: <%= @income_category.colour %>;">
+            <%= @income_category.colour %>
+          </span>
+        </li>
+        <li class="list-group-item">
           <strong>Description:</strong> <%= @income_category.description.presence || "-" %>
         </li>
       </ul>

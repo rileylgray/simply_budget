@@ -20,6 +20,11 @@
     <%= form.text_area :description, class: "form-control", rows: 2, style: "resize: vertical;" %>
   </div>
 
+  <div class="mb-3">
+    <%= form.label :colour, "Category Colour", class: "form-label" %>
+    <%= form.color_field :colour, class: "form-control form-control-color", value: income_category.colour || "#4CAF50" %>
+  </div>
+
   <div class="d-grid mb-3">
     <%= form.submit "Save Category", class: "btn btn-success" %>
   </div>

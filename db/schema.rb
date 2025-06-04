@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_04_213552) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_04_215250) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_213552) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "colour", default: "#F44336"
     t.index ["expense_id"], name: "index_expense_categories_on_expense_id"
     t.index ["user_id"], name: "index_expense_categories_on_user_id"
   end
@@ -55,7 +56,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_213552) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "end_date"
-    t.string "chart_color", default: "#F44336"
     t.index ["end_date"], name: "index_expenses_on_end_date"
     t.index ["user_id"], name: "index_expenses_on_user_id"
   end
@@ -66,6 +66,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_213552) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "colour", default: "#4CAF50"
     t.index ["user_id"], name: "index_income_categories_on_user_id"
   end
 
@@ -88,7 +89,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_04_213552) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "end_date"
-    t.string "chart_color", default: "#4CAF50"
     t.index ["end_date"], name: "index_incomes_on_end_date"
     t.index ["user_id"], name: "index_incomes_on_user_id"
   end

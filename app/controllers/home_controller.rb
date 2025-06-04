@@ -1,9 +1,15 @@
 class HomeController < ApplicationController
   def show
-    start_of_month = Date.current.beginning_of_month
-    end_of_month = Date.current.end_of_month
-    start_of_year = Date.current.beginning_of_year
-    end_of_year = Date.current.end_of_year
+    month = params[:month]&.to_i || Date.current.month
+    year = params[:year]&.to_i || Date.current.year
+
+    start_of_month = Date.new(year, month, 1)
+    end_of_month = start_of_month.end_of_month
+    start_of_year = Date.new(year, 1, 1)
+    end_of_year = start_of_year.end_of_year
+
+    @selected_month = month
+    @selected_year = year
 
     @monthly_income = total_income_for_period(current_user, start_of_month, end_of_month)
     @monthly_expenses = total_expense_for_period(current_user, start_of_month, end_of_month)
@@ -22,9 +28,36 @@ class HomeController < ApplicationController
     @yearly_category_spending = category_expense_for_period(current_user, start_of_year, end_of_year)
     @yearly_category_labels = @yearly_category_spending.keys
     @yearly_category_amounts = @yearly_category_spending.values
+    @category_colours = ExpenseCategory.where(name: @category_labels, user: current_user).pluck(:name, :colour).to_h
+    @yearly_category_colours = ExpenseCategory.where(name: @yearly_category_labels, user: current_user).pluck(:name, :colour).to_h
+    @income_by_category_month = income_by_category_for_period(current_user, start_of_month, end_of_month)
+    @income_by_category_year = income_by_category_for_period(current_user, start_of_year, end_of_year)
+    @income_category_labels_month = @income_by_category_month.keys
+    @income_category_amounts_month = @income_by_category_month.values
+    @income_category_labels_year = @income_by_category_year.keys
+    @income_category_amounts_year = @income_by_category_year.values
+    @income_category_colours = IncomeCategory.where(name: @income_category_labels_month, user: current_user).pluck(:name, :colour).to_h
+    @income_category_colours_year = IncomeCategory.where(name: @income_category_labels_year, user: current_user).pluck(:name, :colour).to_h
   end
 
   private
+
+  def income_by_category_for_period(user, period_start, period_end)
+    result = Hash.new(0)
+    Income.where(user: user).includes(:income_categories).find_each do |income|
+      count = occurrences_in_period(
+        start_date: income.received_on,
+        end_date: income.try(:end_date),
+        frequency: income.frequency,
+        period_start: period_start,
+        period_end: period_end
+      )
+      income.income_categories.each do |cat|
+        result[cat.name] += income.amount * count
+      end
+    end
+    result
+  end
 
   def total_income_for_period(user, period_start, period_end)
     Income.where(user: user).sum do |income|

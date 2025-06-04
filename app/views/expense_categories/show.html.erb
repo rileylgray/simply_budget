@@ -9,6 +9,12 @@
           <strong>Name:</strong> <%= @expense_category.name %>
         </li>
         <li class="list-group-item">
+          <strong>Colour</strong>:
+          <span class="badge rounded-pill" style="background-color: <%= @expense_category.colour %>;">
+            <%= @expense_category.colour %>
+          </span>
+        </li>
+        <li class="list-group-item">
           <strong>Description:</strong> <%= @expense_category.description.presence || "-" %>
         </li>
       </ul>
