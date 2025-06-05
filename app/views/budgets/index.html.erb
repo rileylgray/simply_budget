@@ -1,6 +1,59 @@
-<% content_for :title, "Budgets" %>
+<%# --- Calculate budget usage and warnings --- %>
+<%
+  warnings = []
+  alerts = []
+  budget_status = {}
+
+  @budgets.each do |budget|
+    period_start, period_end = budget_period_range(budget)
+    spent = current_user.expenses
+      .joins(:expense_categories)
+      .where(expense_categories: { id: budget.expense_category_id })
+      .where(
+        "(expenses.spent_on <= ?) AND (expenses.end_date IS NULL OR expenses.end_date >= ?)",
+        period_end, period_start
+      )
+      .distinct
+      .to_a
+      .sum do |expense|
+        occurrences = occurrences_in_period(expense, period_start, period_end)
+        expense.amount * occurrences
+      end
+    percent_remaining = ((budget.amount - spent) / budget.amount.to_f * 100).round
+    budget_status[budget.id] = { spent: spent, percent_remaining: percent_remaining }
+
+    if percent_remaining < 0
+      alerts << budget
+    elsif percent_remaining <= 25
+      warnings << budget
+    end
+  end
+%>
 
 <div class="container mt-4 index-table">
+  <% if alerts.any? %>
+    <div class="alert alert-danger">
+      <strong>Over Budget!</strong>
+      <% alerts.each do |budget| %>
+        <div>
+          <i class="bi bi-exclamation-triangle"></i>
+          <%= budget.expense_category&.name || "-" %> is <%= budget_status[budget.id][:percent_remaining].abs %>% over budget!
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if warnings.any? %>
+    <div class="alert alert-warning">
+      <strong>Budget Warning:</strong>
+      <% warnings.each do |budget| %>
+        <div>
+          <i class="bi bi-exclamation-circle"></i>
+          <%= budget.expense_category&.name || "-" %> has <%= budget_status[budget.id][:percent_remaining] %>% remaining.
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0 fw-bold text-primary">Budgets</h1>
     <%= link_to new_budget_path, class: "btn btn-success shadow-sm", title: "Add New Budget" do %>
@@ -12,26 +65,6 @@
   <div class="card mb-3 shadow-sm border-0">
     <div class="card-body py-3">
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <div>
-          <%= form_with url: budgets_path, method: :get, local: true, class: "row g-2 align-items-center flex-nowrap mb-0" do |f| %>
-            <div class="col-auto">
-              <%= f.label :expense_category_id, "Filter by Category", class: "form-label mb-0 fw-semibold d-none d-sm-inline" %>
-            </div>
-            <div class="col-auto">
-              <%= f.collection_select :expense_category_id, ExpenseCategory.where(user: current_user), :id, :name,
-                { prompt: "All Categories", selected: params[:expense_category_id] },
-                { class: "form-select" } %>
-            </div>
-            <div class="col-auto">
-              <%= f.submit "Filter", class: "btn btn-outline-primary" %>
-            </div>
-            <% if params[:expense_category_id].present? %>
-              <div class="col-auto">
-                <%= link_to "Clear", budgets_path, class: "btn btn-link text-danger" %>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
         <div class="text-muted small flex-grow-1 text-end">
           <span class="fw-semibold"><%= @budgets.length.zero? ? 0 : @budgets.offset_value + 1 %></span> -
           <span class="fw-semibold"><%= [@budgets.offset_value + @budgets.length, @budgets.total_count].min %></span>
@@ -49,20 +82,36 @@
             <thead class="table-light">
               <tr>
                 <th class="text-nowrap">Expense Category</th>
-                <th class="text-nowrap">Amount</th>
+                <th class="text-nowrap d-none d-sm-table-cell">Amount</th>
+                <th class="text-nowrap d-none d-sm-table-cell">Used</th>
+                <th class="text-nowrap">Remaining (%)</th>
                 <th class="text-nowrap d-none d-sm-table-cell">Created</th>
                 <th class="text-nowrap d-none d-sm-table-cell">Updated</th>
-                <th></th>
+                <th class="d-none d-sm-table-cell"></th>
               </tr>
             </thead>
             <tbody>
               <% @budgets.each do |budget| %>
                 <tr class="index-row" onclick="window.location='<%= budget_path(budget) %>'">
                   <td class="fw-semibold"><%= budget.expense_category&.name || "-" %></td>
-                  <td><span class="text-success"><%= number_to_currency(budget.amount) %></span></td>
+                  <td class="d-none d-sm-table-cell"><span class="text-success"><%= number_to_currency(budget.amount) %></span></td>
+                  <td class="d-none d-sm-table-cell">
+                    <% status = budget_status[budget.id] %>
+                    <span class="text-danger fw-bold"><%= number_to_currency(status[:spent]) %></span>
+                  </td>
+                  <td>
+                    <% status = budget_status[budget.id] %>
+                    <% if status[:percent_remaining] < 0 %>
+                      <span class="text-danger fw-bold"><%= status[:percent_remaining] %>%</span>
+                    <% elsif status[:percent_remaining] <= 25 %>
+                      <span class="text-warning fw-bold"><%= status[:percent_remaining] %>%</span>
+                    <% else %>
+                      <span class="text-success fw-bold"><%= status[:percent_remaining] %>%</span>
+                    <% end %>
+                  </td>
                   <td class="d-none d-sm-table-cell"><%= budget.created_at.strftime("%b %d, %Y") %></td>
                   <td class="d-none d-sm-table-cell"><%= budget.updated_at.strftime("%b %d, %Y") %></td>
-                  <td class="text-end" onclick="event.stopPropagation();">
+                  <td class="text-end d-none d-sm-table-cell" onclick="event.stopPropagation();">
                     <%= button_to budget_path(budget), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger", form: { style: "display:inline;" } do %>
                       <i class="bi bi-trash"></i>
                     <% end %>

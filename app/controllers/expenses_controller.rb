@@ -77,6 +77,7 @@ class ExpensesController < ApplicationController
         :notes,
         :frequency,
         :user_id,
+        :end_date,
         expense_category_ids: []
       )
     end

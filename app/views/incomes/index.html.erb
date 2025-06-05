@@ -50,11 +50,12 @@
               <tr>
                 <th class="text-nowrap">Source</th>
                 <th class="text-nowrap">Amount</th>
-                <th class="text-nowrap">Category</th>
+                <th class="text-nowrap d-none d-sm-table-cell">Category</th>
                 <th class="text-nowrap">Frequency</th>
                 <th class="text-nowrap d-none d-sm-table-cell">Date Received</th>
+                <th class="text-nowrap d-none d-sm-table-cell">End Date</th>
                 <th class="text-nowrap d-none d-sm-table-cell">Notes</th>
-                <th></th>
+                <th class="d-none d-sm-table-cell"></th>
               </tr>
             </thead>
             <tbody>
@@ -62,7 +63,7 @@
                 <tr class="index-row" onclick="window.location='<%= income_path(income) %>'">
                   <td class="fw-semibold"><%= income.source %></td>
                   <td><span class="text-success"><%= number_to_currency(income.amount) %></span></td>
-                  <td>
+                  <td class="d-none d-sm-table-cell">
                     <% if income.income_categories.any? %>
                       <% income.income_categories.each do |cat| %>
                         <span class="badge bg-secondary me-1"><%= cat.name %></span>
@@ -74,6 +75,9 @@
                   <td><span class="badge bg-info text-dark"><%= income.frequency.humanize %></span></td>
                   <td class="d-none d-sm-table-cell"><%= income.received_on.strftime("%b %d, %Y") if income.received_on %></td>
                   <td class="d-none d-sm-table-cell">
+                    <%= income.end_date ? income.end_date.strftime("%b %d, %Y") : "Ongoing" %>
+                  </td>
+                  <td class="d-none d-sm-table-cell">
                     <% if income.notes.present? %>
                       <span title="<%= income.notes %>">
                         <%= truncate(income.notes, length: 20) %>
@@ -82,7 +86,7 @@
                       <span class="text-muted">-</span>
                     <% end %>
                   </td>
-                  <td class="text-end" onclick="event.stopPropagation();">
+                  <td class="text-end d-none d-sm-table-cell" onclick="event.stopPropagation();">
                     <%= button_to income_path(income), method: :delete,
                           data: { turbo_confirm: "Are you sure you want to delete this income?" },
                           class: "btn btn-sm btn-outline-danger shadow-sm", form: { style: "display:inline;" } do %>

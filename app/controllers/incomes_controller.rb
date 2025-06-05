@@ -77,6 +77,7 @@ class IncomesController < ApplicationController
         :received_on,
         :notes,
         :frequency,
+        :end_date,
         income_category_ids: []
       )
     end

@@ -37,6 +37,11 @@
   </div>
 
   <div class="mb-3">
+    <%= form.label :end_date, "End Date", class: "form-label" %>
+    <%= form.date_field :end_date, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
     <%= form.label :notes, class: "form-label" %>
     <%= form.text_area :notes, class: "form-control", rows: 3, style: "resize: vertical;" %>
   </div>

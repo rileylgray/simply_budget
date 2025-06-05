@@ -16,6 +16,22 @@
           <strong>Date Spent:</strong> <%= @expense.spent_on.strftime("%b %d, %Y") if @expense.spent_on %>
         </li>
         <li class="list-group-item">
+          <strong>End Date:</strong> <%= @expense.end_date ? @expense.end_date.strftime("%b %d, %Y") : "Ongoing" %>
+        </li>
+        <li class="list-group-item">
+          <strong>Categories:</strong>
+          <% if @expense.expense_categories.any? %>
+            <ul class="list-inline mb-0">
+              <% @expense.expense_categories.each do |category| %>
+                <li class="list-inline-item">
+                  <span class="badge bg-secondary"><%= category.name %></span>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <span class="text-muted">No categories assigned</span>
+          <% end %>
+        <li class="list-group-item">
           <strong>Notes:</strong> <%= @expense.notes.presence || "-" %>
         </li>
       </ul>
