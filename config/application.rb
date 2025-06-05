@@ -23,5 +23,14 @@ module Bugeting
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: "smtp.mailersend.net",
+      port: 587,
+      user_name: "test-51ndgwvzq2qlzqx8.mlsender.net",
+      password: "mlsn.6f2abf96b7462cc4cfc2b56071b050793f26b06d9c871f89ec749cb8eb1a81d2",
+      authentication: :plain,
+      enable_starttls_auto: true
+    }
   end
 end

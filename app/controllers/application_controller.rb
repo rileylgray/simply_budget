@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   def valid_session
     # Check if user is in session controller
-    return if controller_name == "sessions" || (controller_name == "users" && action_name.in?(%w[new create]))
+    return if controller_name == "sessions" || (controller_name == "users" && action_name.in?(%w[new create confirm_email]))
 
     if session[:user_id].nil? || !User.exists?(session[:user_id])
       session[:user_id] = nil

@@ -9,10 +9,20 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      session[:user_id] = @user.id
-      redirect_to root_path, notice: "User was successfully created."
+      UserMailer.email_confirmation(@user, confirm_email_url).deliver_now
+      redirect_to sign_in_path, notice: "Please check your email to confirm your account."
     else
-    render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def confirm_email
+    user = User.find_by(confirmation_token: params[:token])
+    if user && !user.confirmed?
+      user.confirm!
+      redirect_to sign_in_path, notice: "Your email has been confirmed. Please sign in."
+    else
+      redirect_to sign_in_path, alert: "Invalid or expired confirmation link."
     end
   end
 

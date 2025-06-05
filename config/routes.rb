@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
   delete "sign_out", to: "sessions#destroy"
+  get "confirm_email", to: "users#confirm_email"
 
   resources :home, only: [ :show ]
 end

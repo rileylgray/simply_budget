@@ -12,13 +12,28 @@ class User < ApplicationRecord
   has_many :expense_categories, dependent: :destroy
   has_many :budgets, dependent: :destroy
 
+  before_create :generate_confirmation_token
+
+
   def name
     "#{firstname} #{lastname}"
+  end
+
+  def confirmed?
+    confirmed_at.present?
+  end
+
+  def confirm!
+    update(confirmed_at: Time.current, confirmation_token: nil)
   end
 
   private
 
   def password_required?
     new_record? || password.present?
+  end
+
+  def generate_confirmation_token
+    self.confirmation_token = SecureRandom.urlsafe_base64(32)
   end
 end
