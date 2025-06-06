@@ -7,7 +7,7 @@ class PasswordResetsController < ApplicationController
     if user
       user.generate_reset_password_token!
       # Send reset email
-      UserMailer.password_reset(user).deliver_now
+      UserMailer.password_reset(user, edit_password_reset_url(token: user.reset_password_token)).deliver_now
     end
     redirect_to sign_in_path, notice: "If your email exists in our system, you will receive a password reset link."
   end

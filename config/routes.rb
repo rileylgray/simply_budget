@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   delete "sign_out", to: "sessions#destroy"
   get "confirm_email", to: "users#confirm_email"
 
-  resources :password_resets, only: [ :new, :create, :edit, :update ]
+  resources :password_resets, only: [ :new, :create ], path_names: { new: "" }
+  get "password_resets/edit", to: "password_resets#edit", as: :edit_password_reset
+  patch "password_resets",     to: "password_resets#update", as: :password_reset
 
   resources :home, only: [ :show, :index ]
 end
