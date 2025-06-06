@@ -3,41 +3,41 @@
     <span class="navbar-brand">
       <%= link_to "Simply Budget", root_path, class: "text-white text-decoration-none" %>
     </span>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-3">
-        <li class="nav-item">
-          <%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "Budgets", budgets_path, class: "nav-link #{'active' if controller_name == "budgets"}" %>
-        </li>
-        <li class="nav-item dropdown">
-          <%= link_to "Income Streams", incomes_path, class: "nav-link dropdown-toggle #{'active' if controller_name.start_with?('income')}", id: "incomesDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } %>
-          <ul class="dropdown-menu" aria-labelledby="incomesDropdown">
-            <li>
-              <%= link_to "All", incomes_path, class: "dropdown-item #{'active' if current_page?(incomes_path)}" %>
-            </li>
-            <li>
-              <%= link_to "Categories", income_categories_path, class: "dropdown-item #{'active' if current_page?(income_categories_path)}" %>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <%= link_to "Expenses", expenses_path, class: "nav-link dropdown-toggle #{'active' if controller_name.start_with?('expense')}", id: "expensesDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } %>
-          <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
-            <li>
-              <%= link_to "All", expenses_path, class: "dropdown-item #{'active' if current_page?(expenses_path)}" %>
-            </li>
-            <li>
-              <%= link_to "Categories", expense_categories_path, class: "dropdown-item #{'active' if current_page?(expense_categories_path)}" %>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <% if logged_in? %>
+    <% if logged_in? %>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-3">
+          <li class="nav-item">
+            <%= link_to "Home", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Budgets", budgets_path, class: "nav-link #{'active' if controller_name == "budgets"}" %>
+          </li>
+          <li class="nav-item dropdown">
+            <%= link_to "Income Streams", incomes_path, class: "nav-link dropdown-toggle #{'active' if controller_name.start_with?('income')}", id: "incomesDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } %>
+            <ul class="dropdown-menu" aria-labelledby="incomesDropdown">
+              <li>
+                <%= link_to "All", incomes_path, class: "dropdown-item #{'active' if current_page?(incomes_path)}" %>
+              </li>
+              <li>
+                <%= link_to "Categories", income_categories_path, class: "dropdown-item #{'active' if current_page?(income_categories_path)}" %>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <%= link_to "Expenses", expenses_path, class: "nav-link dropdown-toggle #{'active' if controller_name.start_with?('expense')}", id: "expensesDropdown", role: "button", data: { bs_toggle: "dropdown" }, aria: { expanded: "false" } %>
+            <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+              <li>
+                <%= link_to "All", expenses_path, class: "dropdown-item #{'active' if current_page?(expenses_path)}" %>
+              </li>
+              <li>
+                <%= link_to "Categories", expense_categories_path, class: "dropdown-item #{'active' if current_page?(expense_categories_path)}" %>
+              </li>
+            </ul>
+          </li>
+        </ul>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,7 +53,11 @@
             </ul>
           </li>
         </ul>
-      <% end %>
-    </div>
+      </div>
+    <% elsif !current_page?(sign_in_path) && !current_page?(new_user_path) %>
+      <div class="d-flex ms-auto align-items-center">
+        <%= link_to "Sign In", sign_in_path, class: "nav-link text-white" %>
+      </div>
+    <% end %>
   </div>
 </nav>

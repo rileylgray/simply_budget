@@ -1,0 +1,21 @@
+<% content_for :title, "Forgot Password" %>
+
+<div class="container mt-5" style="max-width: 400px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Forgot your password?</h2>
+      <%= form_with url: password_resets_path, local: true do |f| %>
+        <div class="mb-3">
+          <%= f.label :email, "Email address", class: "form-label" %>
+          <%= f.email_field :email, class: "form-control", required: true, autofocus: true %>
+        </div>
+        <div class="d-grid mb-3">
+          <%= f.submit "Send Reset Instructions", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+      <div class="text-center">
+        <%= link_to "Back to Sign In", sign_in_path, class: "btn btn-link" %>
+      </div>
+    </div>
+  </div>
+</div>

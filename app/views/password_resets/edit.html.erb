@@ -1,0 +1,26 @@
+<% content_for :title, "Reset Password" %>
+
+<div class="container mt-5" style="max-width: 400px;">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Reset your password</h2>
+      <%= form_with url: password_reset_path, method: :patch, local: true do |f| %>
+        <%= hidden_field_tag :token, params[:token] %>
+        <div class="mb-3">
+          <%= f.label :password, "New Password", class: "form-label" %>
+          <%= f.password_field :password, class: "form-control", required: true %>
+        </div>
+        <div class="mb-3">
+          <%= f.label :password_confirmation, "Confirm New Password", class: "form-label" %>
+          <%= f.password_field :password_confirmation, class: "form-control", required: true %>
+        </div>
+        <div class="d-grid mb-3">
+          <%= f.submit "Update Password", class: "btn btn-success" %>
+        </div>
+      <% end %>
+      <div class="text-center">
+        <%= link_to "Back to Sign In", sign_in_path, class: "btn btn-link" %>
+      </div>
+    </div>
+  </div>
+</div>

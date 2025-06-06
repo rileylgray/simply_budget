@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+  before_action :require_login
   def show
     month = params[:month]&.to_i || Date.current.month
     year = params[:year]&.to_i || Date.current.year

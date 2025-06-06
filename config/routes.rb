@@ -12,5 +12,7 @@ Rails.application.routes.draw do
   delete "sign_out", to: "sessions#destroy"
   get "confirm_email", to: "users#confirm_email"
 
+  resources :password_resets, only: [ :new, :create, :edit, :update ]
+
   resources :home, only: [ :show ]
 end

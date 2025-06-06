@@ -1,4 +1,5 @@
 class ExpenseCategoriesController < ApplicationController
+  before_action :require_login
   before_action :set_expense_category, only: %i[ show edit update destroy ]
 
   # GET /expense_categories or /expense_categories.json

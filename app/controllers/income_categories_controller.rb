@@ -1,4 +1,5 @@
 class IncomeCategoriesController < ApplicationController
+  before_action :require_login
   before_action :set_income_category, only: %i[ show edit update destroy ]
 
   # GET /income_categories or /income_categories.json
