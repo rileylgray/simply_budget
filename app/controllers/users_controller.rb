@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_login, except: [ :new, :create, :confirm_email ]
+  before_action :require_login, except: [ :new, :create, :confirm_email, :resend_confirmation ]
 
   before_action :set_user, only: [ :edit, :show, :update ]
 
@@ -37,6 +37,18 @@ class UsersController < ApplicationController
       redirect_to @user, notice: "User was successfully updated."
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def resend_confirmation
+    @user = User.find(params[:id])
+    if !@user.confirmed?
+      @user.generate_confirmation_token if @user.confirmation_token.blank?
+      @user.save(validate: false)
+      UserMailer.email_confirmation(@user, confirm_email_url(token: @user.confirmation_token)).deliver_now
+      redirect_to sign_in_path, notice: "Verification email resent. Please check your inbox."
+    else
+      redirect_to root_path, alert: "Your email is already confirmed."
     end
   end
 

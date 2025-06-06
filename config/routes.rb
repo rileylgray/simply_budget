@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post "sign_in", to: "sessions#create"
   delete "sign_out", to: "sessions#destroy"
   get "confirm_email", to: "users#confirm_email"
+  post "users/:id/resend_confirmation", to: "users#resend_confirmation", as: :resend_confirmation_user
 
   resources :password_resets, only: [ :new, :create ], path_names: { new: "" }
   get "password_resets/edit", to: "password_resets#edit", as: :edit_password_reset

@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   private
 
   def require_login
-    unless logged_in?
-      redirect_to sign_in_path, alert: "Please log in to continue."
+    unless logged_in? && current_user.confirmed?
+      redirect_to sign_in_path, alert: "Please log in and verify your email to continue."
     end
   end
 
