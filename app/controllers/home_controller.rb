@@ -1,5 +1,8 @@
 class HomeController < ApplicationController
-  before_action :require_login
+  before_action :require_login, except: [ :index ]
+
+  def index; end
+
   def show
     month = params[:month]&.to_i || Date.current.month
     year = params[:year]&.to_i || Date.current.year

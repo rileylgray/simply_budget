@@ -14,5 +14,5 @@ Rails.application.routes.draw do
 
   resources :password_resets, only: [ :new, :create, :edit, :update ]
 
-  resources :home, only: [ :show ]
+  resources :home, only: [ :show, :index ]
 end
